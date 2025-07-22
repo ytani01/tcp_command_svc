@@ -1,18 +1,19 @@
 [project]
 name = "tcp-command-svc"
 dynamic = ["version"]
-#version = "v0.2.0"
 description = "Add your description here"
 readme = "README.md"
 authors = [
     { name = "Yoichi Tanibayashi", email = "yoichi@tanibayashi.jp" }
 ]
 requires-python = ">=3.11"
-dependencies = []
+dependencies = [
+    "click",
+]
 
 [build-system]
-requires = ["uv_build>=0.8.0,<0.9", "hatch-vcs"]
-build-backend = "uv_build"
+requires = ["hatchling", "hatch-vcs"]
+build-backend = "hatchling.build"
 
-[tool.htach.version]
+[tool.hatch.version]
 source = "vcs"
