@@ -15,10 +15,10 @@ class CmdClient:
 
     BUFSIZE = 512
 
-    def __init__(self, svr_host=DEF_HOST, svr_port=DEF_PORT, dbg=False):
+    def __init__(self, svr_host=DEF_HOST, svr_port=DEF_PORT, debug=False):
         """ init """
-        self._dbg = dbg
-        __class__.__log = get_logger(__class__.__name__, self._dbg)
+        self._debug = debug
+        __class__.__log = get_logger(__class__.__name__, self._debug)
         self.__log.debug('svr: %s:%s', svr_host, svr_port)
 
         self._svr_host = svr_host

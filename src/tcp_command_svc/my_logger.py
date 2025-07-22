@@ -22,7 +22,7 @@ CONSOLE_HANDLER.setFormatter(HANDLER_FMT)
 CONSOLE_HANDLER.setLevel(DEBUG)
 
 
-def get_logger(name, dbg=False):
+def get_logger(name, debug=False):
     """
     get logger
     """
@@ -37,14 +37,14 @@ def get_logger(name, dbg=False):
     # isinstance()では、boolもintと判定されるので、
     # 先に bool かどうかを判定する
 
-    if isinstance(dbg, bool):
-        if dbg:
+    if isinstance(debug, bool):
+        if debug:
             logger.setLevel(DEBUG)
 
         return logger
 
-    if isinstance(dbg, int):
-        logger.setLevel(dbg)
+    if isinstance(debug, int):
+        logger.setLevel(debug)
         return logger
 
-    raise ValueError('invalid `dbg` value: %s' % (dbg))
+    raise ValueError('invalid `debug` value: %s' % (debug))

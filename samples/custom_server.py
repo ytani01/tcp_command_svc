@@ -3,13 +3,13 @@ import click
 from tcp_command_svc import CmdServer, get_logger
 
 # ロガーの初期化
-log = get_logger(__name__, dbg=True)
+log = get_logger(__name__, debug=True)
 
 # --- 独自のコマンドを実装する ---
 # argsはコマンドラインをスペースで分割したリスト。
 # 例: "MYCMD 123" -> ['MYCMD', '123']
 
-def cmd_my_command(args):
+def cmd_reverse(args):
     """引数を逆順にして返すコマンド"""
     log.debug(f"args={args}")
     if len(args) < 2:
@@ -43,7 +43,7 @@ def main(port):
     server = CmdServer(port=port, debug=True)
 
     # 作成したコマンドをサーバーに登録
-    server.add_cmd("MYCMD", cmd_my_command)
+    server.add_cmd("REVERSE", cmd_reverse)
     server.add_cmd("STATUS", cmd_status)
     server.add_cmd("ECHO", cmd_echo)
     server.add_cmd("NOW", cmd_now)

@@ -13,8 +13,8 @@ class CmdHandler(socketserver.StreamRequestHandler):
 
     def __init__(self, req, client_addr, svr):
         """ __init__ """
-        self._dbg = svr._dbg
-        __class__.__log = get_logger(__class__.__name__, self._dbg)
+        self._debug = svr._debug
+        __class__.__log = get_logger(__class__.__name__, self._debug)
         self.__log.debug('client_addr: %s', client_addr)
 
         self._req = req
@@ -104,14 +104,15 @@ class CmdServer(socketserver.ThreadingTCPServer):
         ----------
         port: int
         """
-        self._dbg = debug
-        __class__.__log = get_logger(__class__.__name__, self._dbg)
+        self._debug = debug
+        __class__.__log = get_logger(__class__.__name__, self._debug)
         self.__log.debug('port=%s', port)
 
         self._port = port
 
         self._cmd = {}
         self.add_cmd('HELLO', self.cmd_hello)
+        self.add_cmd('COMMANDS', self.cmd_commands)
 
         try:
             super().__init__(('', self._port), CmdHandler)
@@ -138,4 +139,17 @@ class CmdServer(socketserver.ThreadingTCPServer):
         args: list(str)
         """
         self.__log.debug('args=%s', args)
-        return 'OK HELLO'
+        return f'OK HELLO: {args}'
+
+    def cmd_commands(self, args):
+        """
+        Returns a list of supported commands.
+
+        Parameters
+        ----------
+        args: list(str)
+        """
+        self.__log.debug('args=%s', args)
+        if len(args) != 1:
+            return 'NG'
+        return 'OK ' + ', '.join(sorted(self._cmd.keys()))

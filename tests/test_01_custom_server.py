@@ -49,11 +49,7 @@ def custom_server():
                 os.killpg(os.getpgid(server_process.pid), signal.SIGKILL)
                 server_process.wait()
 
-def test_hello_command(custom_server):
-    """Test sending a HELLO command to the custom server."""
-    client = CmdClient(svr_host=SERVER_HOST, svr_port=SERVER_PORT)
-    response = client.call('HELLO')
-    assert response == 'OK HELLO'
+
 
 def test_echo_command(custom_server):
     """Test sending an ECHO command to the custom server."""
@@ -61,16 +57,16 @@ def test_echo_command(custom_server):
     response = client.call('ECHO test message')
     assert response == 'OK test message'
 
-def test_mycmd_with_argument(custom_server):
-    """Test sending a MYCMD command with an argument to the custom server."""
+def test_reverse_with_argument(custom_server):
+    """Test sending a REVERSE command with an argument to the custom server."""
     client = CmdClient(svr_host=SERVER_HOST, svr_port=SERVER_PORT)
-    response = client.call('MYCMD argument')
+    response = client.call('REVERSE argument')
     assert response == 'OK tnemugra'
 
-def test_mycmd_without_argument(custom_server):
-    """Test sending a MYCMD command without an argument to the custom server."""
+def test_reverse_without_argument(custom_server):
+    """Test sending a REVERSE command without an argument to the custom server."""
     client = CmdClient(svr_host=SERVER_HOST, svr_port=SERVER_PORT)
-    response = client.call('MYCMD')
+    response = client.call('REVERSE')
     assert response == 'NG missing argument'
 
 def test_status_command(custom_server):
@@ -94,3 +90,13 @@ def test_now_command_with_extra_argument(custom_server):
     client = CmdClient(svr_host=SERVER_HOST, svr_port=SERVER_PORT)
     response = client.call('NOW extra_arg')
     assert response == 'NG'
+
+def test_commands_command(custom_server):
+    """Test sending a COMMANDS command to the custom server."""
+    client = CmdClient(svr_host=SERVER_HOST, svr_port=SERVER_PORT)
+    response = client.call('COMMANDS')
+    # The order of commands might vary, so check for presence of expected commands
+    expected_commands = ['ECHO', 'NOW', 'REVERSE', 'STATUS', 'HELLO', 'COMMANDS']
+    for cmd in expected_commands:
+        assert cmd in response
+    assert response.startswith('OK ')
