@@ -1,4 +1,5 @@
 import datetime
+import click
 from tcp_command_svc import CmdServer, get_logger
 
 # ロガーの初期化
@@ -35,10 +36,11 @@ def cmd_now(args):
     s = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S.%f')
     return 'OK ' + s
 
-# --- サーバーのセットアップ ---
-if __name__ == '__main__':
-    # CmdServerをポート54321で初期化
-    server = CmdServer(port=54321, debug=True)
+@click.command()
+@click.option('--port', default=54321, help='Port to listen on.')
+def main(port):
+    # CmdServerを初期化
+    server = CmdServer(port=port, debug=True)
 
     # 作成したコマンドをサーバーに登録
     server.add_cmd("MYCMD", cmd_my_command)
@@ -52,3 +54,6 @@ if __name__ == '__main__':
         server.serve_forever()
     except KeyboardInterrupt:
         log.info("Server stopped.")
+
+if __name__ == '__main__':
+    main()
